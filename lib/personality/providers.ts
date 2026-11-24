@@ -70,7 +70,10 @@ export function mockTurn(ctx: TurnContext, seed = Date.now()): { lines: { object
     if (lines.length >= ctx.maxLines) break;
     if (e.type === "vanished") {
       const gossip = present.find((o) => !spoke.has(o.id));
-      if (gossip) lines.push(say("vanished", gossip.id, e.objectId)), spoke.add(gossip.id);
+      if (gossip) {
+        lines.push(say("vanished", gossip.id, e.objectId));
+        spoke.add(gossip.id);
+      }
       continue;
     }
     if (spoke.has(e.objectId) || !byId.get(e.objectId)?.present) continue;

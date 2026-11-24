@@ -34,7 +34,8 @@ export function createSoul(input: { label: string; ocrText?: string; color?: str
   const h = hash(`${input.label}|${input.ocrText ?? ""}|${input.color ?? ""}|${input.seed}`);
   const pick = <T,>(arr: T[], salt: number) => arr[hash(`${h}:${salt}`) % arr.length];
   const pool = NAMES[input.label];
-  const fallback = [`${title(input.label)}y`, `Sir ${title(input.label)}`, `${input.color ? title(input.color) + " " : "Little "}${title(input.label)}`];
+  const last = title(input.label.split(/\s+/).pop() ?? input.label); // "wooden cabinet" → "Cabinet"
+  const fallback = [`Captain ${last}`, `Lil' ${last}`, `Sir ${last}`, `${last} McGee`, `Professor ${last}`, `Madame ${last}`, `${input.color ? title(input.color) : "Big"} ${last}`];
   const name = pool ? pick(pool, 1) : pick(fallback, 1);
   const traits: string[] = [];
   for (let salt = 2; traits.length < 3; salt++) {

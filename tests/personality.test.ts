@@ -133,7 +133,7 @@ describe("OpenAI-compatible provider", () => {
   it("raises HttpError on 429", async () => {
     vi.stubGlobal("fetch", async () => new Response("slow down", { status: 429 }));
     const p = openAICompatible({ ...providerConfigs({ GROQ_API_KEY: "k" })[0] });
-    await expect(p.stream({ messages: [], context: ctx(), signal: new AbortController().signal }).next()).rejects.toMatchObject({ status: 429 });
+    await expect(p.stream({ messages: [], context: ctx(), signal: new AbortController().signal })[Symbol.asyncIterator]().next()).rejects.toMatchObject({ status: 429 });
     vi.unstubAllGlobals();
   });
 

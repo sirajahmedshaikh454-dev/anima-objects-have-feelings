@@ -1,0 +1,1 @@
+Sample photos from the COCO 2017 validation set (https://cocodataset.org), Flickr images under Creative Commons licenses.

@@ -20,8 +20,9 @@ export const defaultProviders = (): Provider[] => [
 ];
 
 // Identical prompts within 10 minutes reuse the answer (saves free-tier quota).
-const g = globalThis as unknown as { __animaCache?: Map<number, { at: number; lines: Line[]; provider: string }> };
-const cache = (g.__animaCache ??= new Map());
+type CacheEntry = { at: number; lines: Line[]; provider: string };
+const g = globalThis as unknown as { __animaCache?: Map<number, CacheEntry> };
+const cache = (g.__animaCache ??= new Map<number, CacheEntry>());
 const CACHE_MS = 10 * 60_000;
 
 async function attempt(p: Provider, ctx: TurnContext, timeoutMs: number, h: TurnHandlers) {

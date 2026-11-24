@@ -37,7 +37,7 @@ export type ScanResult = {
 
 // shortcut: per-session scene state lives in process memory (single local server); move to the DB if this ever runs multi-process.
 const g = globalThis as unknown as { __animaScenes?: Map<string, SceneState> };
-const scenes = (g.__animaScenes ??= new Map());
+const scenes = (g.__animaScenes ??= new Map<string, SceneState>());
 export const resetSession = (sessionId: string) => scenes.delete(sessionId);
 
 /** A Db or a transaction on it. */
