@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { Settings } from "@/lib/db/settings";
 
 type Provider = { name: string; model: string; enabled: boolean; signup: string; lastOk: boolean | null; lastError: string | null; lastLatencyMs: number | null };
-type Status = { settings: Settings; providers: Provider[]; vision: { ok: boolean; detail: string } };
+type Status = { settings: Settings; providers: Provider[]; vision: { ok: boolean; detail: string; avgMs: number | null; scans: number } };
 
 const LABEL: Record<string, string> = { groq: "Groq", gemini: "Gemini", openrouter: "OpenRouter", ollama: "Ollama", mock: "Mock (offline)" };
 
@@ -86,7 +86,10 @@ export default function SettingsPage() {
           <li className="flex items-center gap-2">
             <Dot ok={status.vision.ok} />
             <b>Mirage vision</b>
-            <span className="text-sm text-ink-soft">{status.vision.detail}</span>
+            <span className="text-sm text-ink-soft">
+              {status.vision.detail}
+              {status.vision.avgMs !== null && ` · avg ${status.vision.avgMs} ms over last ${status.vision.scans} scans`}
+            </span>
           </li>
           {status.providers.map((p) => (
             <li key={p.name} className="flex flex-wrap items-center gap-2">

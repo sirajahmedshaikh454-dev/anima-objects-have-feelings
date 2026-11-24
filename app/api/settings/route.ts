@@ -18,7 +18,9 @@ export async function GET() {
     const last = calls.find((c) => c.provider === p.name);
     return { ...p, lastOk: last?.ok ?? null, lastError: last?.error ?? null, lastLatencyMs: last ? Math.round(last.latencyMs) : null };
   });
-  return Response.json({ settings: getSettings(db), providers, vision: await visionHealth() });
+  const recent = db.select({ ms: s.scans.latencyMs }).from(s.scans).orderBy(desc(s.scans.id)).limit(20).all();
+  const avgMs = recent.length ? Math.round(recent.reduce((a, r) => a + r.ms, 0) / recent.length) : null;
+  return Response.json({ settings: getSettings(db), providers, vision: { ...(await visionHealth()), avgMs, scans: recent.length } });
 }
 
 export async function PUT(req: Request) {

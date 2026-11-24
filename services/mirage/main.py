@@ -5,6 +5,7 @@ import io
 import os
 import threading
 import time
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from PIL import Image, UnidentifiedImageError
@@ -12,7 +13,6 @@ from PIL import Image, UnidentifiedImageError
 MAX_SIDE = int(os.environ.get("MIRAGE_MAX_SIDE", "640"))
 MAX_BYTES = 15 * 1024 * 1024
 
-app = FastAPI(title="ANIMA Mirage service")
 _state: dict = {"model": None, "error": None, "load_ms": None}
 _lock = threading.Lock()
 
@@ -32,9 +32,13 @@ def _load() -> None:
         _state["error"] = str(exc)
 
 
-@app.on_event("startup")
-def startup() -> None:
-    _load()
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    _load()  # model is loaded once and kept in memory
+    yield
+
+
+app = FastAPI(title="ANIMA Mirage service", lifespan=lifespan)
 
 
 @app.get("/health")
