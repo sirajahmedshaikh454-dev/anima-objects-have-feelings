@@ -1,7 +1,7 @@
 // Free LLM providers in fallback order. Model names live here (overridable via .env), never in engine code.
 // Checked against official docs on 2026-11-24:
 //  - Groq: llama-3.1-8b-instant moved to Enterprise; gpt-oss-20b is on the free plan.
-//  - Gemini: "gemini-flash-latest" is Google's auto-updating alias.
+//  - Gemini: gemini-3.5-flash-lite answered in ~1 s; the "gemini-flash-latest" alias returned 503 (high demand) on 2026-11-24.
 //  - OpenRouter: "openrouter/free" routes to whichever ":free" model is available.
 
 export type ProviderConfig = {
@@ -30,9 +30,10 @@ export function providerConfigs(env: Record<string, string | undefined> = proces
       name: "gemini",
       baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
       apiKey: key("GEMINI_API_KEY"),
-      model: env.GEMINI_MODEL || "gemini-flash-latest",
+      model: env.GEMINI_MODEL || "gemini-3.5-flash-lite",
       enabled: !!key("GEMINI_API_KEY"),
       signup: "https://aistudio.google.com/apikey",
+      extra: { reasoning_effort: env.GEMINI_REASONING_EFFORT || "low" }, // less "thinking" = faster first word
     },
     {
       name: "openrouter",

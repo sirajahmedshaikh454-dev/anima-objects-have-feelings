@@ -57,6 +57,9 @@ describe("output parsing", () => {
     const c = ctx({ maxLines: 5, objects: [obj(1, "A", "mug"), { ...obj(2, "B", "pen"), present: false }] });
     const lines = parseTurn('```json\n{"lines":[{"object_id":1,"text":"One. Two! Three?","emotion":"happy","target":"user"},{"object_id":"2","text":"hi"}]}\n```', c);
     expect(lines).toEqual([{ object_id: "1", text: "One. Two!", emotion: "happy", target: "user" }]);
+    // Gemini really answered with "#1" ids (prompt style); they must still count.
+    expect(parseTurn('{"lines":[{"object_id":"#1","text":"Hi.","target":"#2"}]}', c)?.[0]).toMatchObject({ object_id: "1", target: "2" });
+    expect(partialLines('{"lines":[{"object_id":"#1","text":"Hel')).toEqual([{ object_id: "1", text: "Hel" }]);
     expect(parseTurn("not json", c)).toBeNull();
     expect(parseTurn('{"lines":[]}', c)).toBeNull();
   });

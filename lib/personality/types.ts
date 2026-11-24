@@ -25,11 +25,14 @@ export type TurnContext = {
   maxLines: number;
 };
 
+// LLMs often echo the prompt's "#1" style for ids; accept 1, "1" and "#1".
+const Id = z.union([z.string(), z.number()]).transform((v) => String(v).trim().replace(/^#/, ""));
+
 export const LineSchema = z.object({
-  object_id: z.union([z.string(), z.number()]).transform(String),
+  object_id: Id,
   text: z.string().min(1).max(400),
   emotion: z.string().default("neutral"),
-  target: z.union([z.string(), z.number()]).transform(String).default("user"),
+  target: Id.default("user"),
 });
 export const TurnSchema = z.object({ lines: z.array(LineSchema).min(1) });
 

@@ -3,7 +3,7 @@ import { TurnSchema, type Line, type TurnContext } from "./types";
 /** Text of each line seen so far in a partially streamed JSON reply, for word-by-word display. */
 export function partialLines(buffer: string): { object_id: string; text: string }[] {
   const out: { object_id: string; text: string }[] = [];
-  const re = /"object_id"\s*:\s*"?([\w-]+)"?\s*,[^{}]*?"text"\s*:\s*"((?:[^"\\]|\\.)*)/g;
+  const re = /"object_id"\s*:\s*"?#?([\w-]+)"?\s*,[^{}]*?"text"\s*:\s*"((?:[^"\\]|\\.)*)/g;
   for (const m of buffer.matchAll(re)) {
     const raw = m[2].replace(/\\$/, ""); // a dangling escape mid-stream
     let text: string;
