@@ -22,3 +22,4 @@
 | 18 | ui-ux-pro design system used for palette + fonts (Fredoka/Nunito, orange on cream); its "Swiss minimal" style overridden with a cartoon look | The spec asks for playful/cartoon, explicitly not a SaaS dashboard. |
 | 19 | E2E tests run with `ANIMA_FAKE_VISION=1` (replays a real recorded Mirage output) and empty LLM keys | Deterministic, no model download in CI, never spends free-tier quota (9.4). |
 | 20 | Fixed test (9.7): `extracts partial line text mid-stream` sliced the recording at 160 chars, before line 2's text began | The code was right; the cut point now lands inside line 2. |
+| 21 | `.npmrc` sets `ignore-scripts=true` | Found by the fresh-clone test: installing from the lockfile made npm run an implicit `node-gyp rebuild` for better-sqlite3 (which ships prebuilt binaries), failing on Windows without Visual Studio. No dependency needs install scripts (esbuild's is an optional check; fsevents is macOS-only). |

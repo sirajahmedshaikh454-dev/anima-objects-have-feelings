@@ -54,6 +54,8 @@
 
 - Full pass: `npm run verify` green (lint, typecheck, 40 Vitest, 4 pytest, build); Playwright 8/8 in dev and production builds.
 - GitHub Actions CI (verify + e2e), README, demo script, final report, Mirage + LLM latency shown in Settings.
+- Fresh-clone test (clone → `cp .env.example .env` → `npm run setup` → `npm run verify` → Mirage `/analyze` on a real photo): first run failed (better-sqlite3 compiled from source, no Visual Studio); fixed with `.npmrc` (DECISIONS 21); second run all green.
+- EXIT passed. Tag `v1.0-reentry`.
 
 ### Known issues
 

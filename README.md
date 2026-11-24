@@ -28,7 +28,7 @@ flowchart LR
 
 - **Images never leave your PC.** Mirage runs locally; cloud LLMs only get text (labels, OCR text, memories).
 - **Vision:** [Cactus Mirage](https://pypi.org/project/cactus-compute/) (51 M params, ~22 MB, Apache-2.0) in a FastAPI service, loaded once.
-- **Personality:** one adapter over free providers. Each is used only if its key is in `.env`; on 429, timeout (8 s) or error it retries once, then falls to the next. The offline mock engine (80+ lines) always works.
+- **Personality:** one adapter over free providers. Each is used only if its key is in `.env`; on 429, timeout (8 s) or error it retries once, then falls to the next. The offline mock engine (82 template lines) always works.
 - **Memory:** better-sqlite3 + Drizzle, WAL mode. Moods drop when an object is ignored and rise when it's seen or talked to.
 
 ## Free keys (all optional)
