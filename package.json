@@ -3,10 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "setup": "npm install && node scripts/mirage.mjs setup && npm run db:migrate",
+    "dev": "concurrently -k -n web,mirage -c magenta,cyan \"npm:dev:web\" \"npm:dev:mirage\"",
+    "dev:web": "next dev -H 0.0.0.0",
+    "dev:https": "concurrently -k -n web,mirage \"next dev -H 0.0.0.0 --experimental-https\" \"npm:dev:mirage\"",
+    "dev:mirage": "node scripts/mirage.mjs serve",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "concurrently -k -n web,mirage \"next start -H 0.0.0.0\" \"npm:dev:mirage\"",
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:py": "node scripts/mirage.mjs test",
+    "test:e2e": "playwright test",
+    "check:providers": "tsx scripts/check-providers.ts",
+    "db:migrate": "tsx scripts/db.ts migrate",
+    "db:seed": "tsx scripts/db.ts seed",
+    "db:reset": "tsx scripts/db.ts reset",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run test:py && npm run build"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
