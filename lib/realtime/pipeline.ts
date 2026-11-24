@@ -125,6 +125,9 @@ export function processScan(
         row = { ...row, mood };
       } else {
         const soul = createSoul({ label: d.label, ocrText: d.ocrText, color: d.color, seed: randomUUID() });
+        // Two chairs in one scene shouldn't both be "Chairlotte".
+        const taken = new Set(objects.map((o) => o.name));
+        for (let n = 2; taken.has(soul.name); n++) soul.name = `${soul.name.replace(/ \d+$/, "")} ${n}`;
         row = tx
           .insert(s.objects)
           .values({

@@ -98,6 +98,13 @@ describe("scan pipeline (temp SQLite file)", () => {
     expect(db.select().from(s.memories).all().map((m) => m.content)).toContain("Was ignored for 1 day.");
   });
 
+  it("never gives two new objects in one scene the same name", () => {
+    const db = tempDb();
+    const chairs = [0, 1, 2, 3, 4].map((i) => ({ name: "chair", box: [i * 190, 100, i * 190 + 150, 300] as [number, number, number, number] }));
+    const r = processScan(db, { analysis: frame(chairs), mode: "upload", sessionId: "n" });
+    expect(new Set(r.objects.map((o) => o.name)).size).toBe(5);
+  });
+
   it("stores near pairs as relationships", () => {
     const db = tempDb();
     processScan(db, { analysis: frame([{ name: "mug", box: MUG }, { name: "phone", box: [150, 480, 260, 640] }, { name: "pen", box: PHONE }]), mode: "upload", sessionId: "r" });
