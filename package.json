@@ -15,7 +15,7 @@
     "test": "vitest run",
     "test:py": "node scripts/mirage.mjs test",
     "test:e2e": "playwright test",
-    "check:providers": "tsx scripts/check-providers.ts",
+    "check:providers": "tsx scripts/check-providers.mts",
     "db:migrate": "tsx scripts/db.ts migrate",
     "db:seed": "tsx scripts/db.ts seed",
     "db:reset": "tsx scripts/db.ts reset",
